@@ -1,0 +1,16 @@
+body {
+  font-family: $font-primary;
+  background: $color-background;
+  color: $color-text;
+  line-height: 1.6;
+  font-size: 18px;
+}
+
+h1, h2, h3, h4 {
+  color: $color-secondary;
+  font-weight: 700;
+}
+
+p {
+  margin-bottom: $space-3;
+}

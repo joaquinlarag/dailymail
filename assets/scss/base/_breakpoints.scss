@@ -1,0 +1,25 @@
+// Breakpoints (mobile-first)
+$bp-sm: 576px;   // teléfonos
+$bp-md: 768px;   // tablets vertical
+$bp-lg: 992px;   // tablets horizontal / laptops pequeñas
+$bp-xl: 1200px;  // escritorio
+$bp-xxl: 1440px; // pantallas grandes
+
+// Mixin responsive universal
+@mixin respond($break) {
+  @if $break == sm {
+    @media (max-width: #{$bp-sm}) { @content; }
+  }
+  @else if $break == md {
+    @media (max-width: #{$bp-md}) { @content; }
+  }
+  @else if $break == lg {
+    @media (max-width: #{$bp-lg}) { @content; }
+  }
+  @else if $break == xl {
+    @media (max-width: #{$bp-xl}) { @content; }
+  }
+  @else if $break == xxl {
+    @media (max-width: #{$bp-xxl}) { @content; }
+  }
+}

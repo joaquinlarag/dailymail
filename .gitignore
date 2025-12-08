@@ -1,0 +1,40 @@
+# ========================================================
+# WordPress Theme + Node.js + Sass .gitignore
+# ========================================================
+
+# -----------------------------------
+# Node / Sass
+# -----------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Map files (opcional: no necesarios en producción)
+*.map
+
+# -----------------------------------
+# WordPress-generated files
+# -----------------------------------
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/debug.log
+
+# -----------------------------------
+# System files
+# -----------------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------------
+# VSCode files
+# -----------------------------------
+.vscode/
+.history/
+
+# -----------------------------------
+# Git metadata backups
+# -----------------------------------
+*.orig

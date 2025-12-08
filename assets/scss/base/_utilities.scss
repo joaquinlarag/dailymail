@@ -1,0 +1,64 @@
+// FLEX SYSTEM
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: $color-muted;
+}
+
+.mb-1 { margin-bottom: $space-1; }
+.mb-2 { margin-bottom: $space-2; }
+.mb-3 { margin-bottom: $space-3; }
+.mb-4 { margin-bottom: $space-4; }
+.mb-5 { margin-bottom: $space-5; }
+
+.pb-1 { padding-bottom: $space-1; }
+.pb-2 { padding-bottom: $space-2; }
+.pb-3 { padding-bottom: $space-3; }
+.pb-4 { padding-bottom: $space-4; }
+
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-none { display: none; }
+
+.w-100 { width: 100%; }
+.max-w { max-width: $max-width; margin-left: auto; margin-right: auto; }
+
+.hide-md {
+  @include respond(md) {
+    display: none;
+  }
+}
+
+.show-md {
+  display: none;
+  @include respond(md) {
+    display: block;
+  }
+}

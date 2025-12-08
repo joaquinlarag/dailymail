@@ -1,0 +1,12 @@
+.section {
+  padding: $space-6 0;
+
+  &--light {
+    background: #fff;
+  }
+
+  &--dark {
+    background: $color-secondary;
+    color: #fff;
+  }
+}
