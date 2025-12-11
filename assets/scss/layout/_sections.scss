@@ -1,0 +1,80 @@
+.section {
+  padding: $space-6 0;
+
+  &--light {
+    background: #fff;
+  }
+
+  &--dark {
+    background: $color-secondary;
+    color: #fff;
+  }
+}
+
+/* HERO SPLIT – HOME */
+
+.hero-split {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #2f2f2f;
+}
+
+.hero-split__col {
+  flex: 1;
+  display: flex;
+}
+
+.hero-split__col--text {
+  padding: 6rem 4rem;
+  color: #eaeaea;
+  align-items: center;
+}
+
+.hero-split__content {
+  max-width: 520px;
+}
+
+.hero-split__title {
+  font-family: 'Lato', sans-serif; // cambia luego si usas la manuscrita
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 2.5rem;
+  color: #ffffff;
+}
+
+.hero-split__desc {
+  color: #c9c9c9;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.hero-split__col--image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 960px) {
+  .hero-split {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .hero-split__col--text {
+    padding: 4rem 2rem;
+  }
+
+  .hero-split__title {
+    font-size: 2.4rem;
+  }
+
+  .hero-split__desc {
+    font-size: 0.95rem;
+  }
+
+  .hero-split__col--image {
+    height: 360px;
+  }
+}
