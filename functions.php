@@ -19,6 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+function dailymail_menus() {
+    register_nav_menus([
+        'primary' => 'menu-principal'
+    ]);
+}
+add_action('after_setup_theme', 'dailymail_menus');
+
 
 function dailymail_enqueue_assets() {
 
@@ -40,5 +47,12 @@ function dailymail_enqueue_assets() {
     );
 }
 
+
+// Para subir SVG - Eliminar esto al terminar el sitio
 add_action('wp_enqueue_scripts', 'dailymail_enqueue_assets');
 
+function allow_svg_uploads($mimes) {
+  $mimes['svg'] = 'image/svg+xml';
+  return $mimes;
+}
+add_filter('upload_mimes', 'allow_svg_uploads');
