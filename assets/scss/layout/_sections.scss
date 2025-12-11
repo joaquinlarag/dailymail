@@ -13,26 +13,45 @@
 
 /* HERO SPLIT – HOME */
 
+
 .hero-split {
   display: flex;
+  min-height: 95vh;
   width: 100%;
-  min-height: 100vh;
   background-color: #2f2f2f;
+  overflow: hidden;
 }
+
 
 .hero-split__col {
   flex: 1;
   display: flex;
 }
 
+/* IZQUIERDA */
 .hero-split__col--text {
-  padding: 6rem 4rem;
-  color: #eaeaea;
+  width: 30%;
+  padding: 120px 80px;
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
+  color: white;
 }
 
+/* CONTENIDO */
 .hero-split__content {
-  max-width: 520px;
+  max-width: 480px;
+  position: relative;
+  z-index: 3;
+}
+
+.hero-title {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.hero-title-line {
+  display: inline-block;
 }
 
 .hero-split__title {
@@ -40,9 +59,18 @@
   font-size: 3.5rem;
   font-weight: 300;
   line-height: 1.2;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
   color: #ffffff;
 }
+
+
+
+.hero-desc .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
 
 .hero-split__desc {
   color: #c9c9c9;
@@ -50,11 +78,44 @@
   line-height: 1.7;
 }
 
-.hero-split__col--image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+.hero-split__content {
+  position: relative;
+  z-index: 5;
+  max-width: 650px;
+  color: white;
 }
+
+.hero-desc .dword {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+
+/* DERECHA */
+.hero-split__col--image {
+  width: 70%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-image-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 140%;   // sobredimensionado para que el parallax no genere huecos
+  top: -20%;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.2);
+  opacity: 0;
+  filter: blur(20px);
+  z-index: 1;
+}
+
+
+
 
 @media (max-width: 960px) {
   .hero-split {
@@ -78,3 +139,74 @@
     height: 360px;
   }
 }
+
+/* SECCIÓN GALERIA – HOME */
+
+
+.section-gallery {
+  background-color: #e5d8d3;
+  padding: 80px 0;    // espacio arriba y abajo
+  display: flex;
+  align-items: center;  // centrar verticalmente el contenido
+  justify-content: center;
+  min-height: 80vh;     // altura visible tipo hero (ajusta a gusto)
+}
+
+
+.gallery {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 1600px;   // opcional: ancho máximo bonito
+  height: fit-content;
+  align-items: center;
+}
+
+
+.gallery__item {
+  flex: 1;
+  max-height: 500px;  // ajustable según diseño
+  display: flex;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   // clave para mantener proporción
+  border-radius: 0;     // opcional
+}
+
+
+.gallery__item--right img {
+  filter: grayscale(100%);
+}
+
+/* Botones */
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateY(40px) scale(0);
+  opacity: 0;
+  z-index: 20;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  font-size: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery__nav--prev {
+  left: 20px;
+}
+
+.gallery__nav--next {
+  right: 20px;
+}
+
