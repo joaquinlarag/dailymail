@@ -150,81 +150,78 @@ p {
   color: #fff;
 }
 
+/* -------------------------------------------- */
 /* HERO SPLIT – HOME */
+/* -------------------------------------------- */
 .hero-split {
   display: flex;
-  min-height: 95vh;
   width: 100%;
+  min-height: 70vh;
   background-color: #2f2f2f;
   overflow: hidden;
+  position: relative;
 }
 
+/* -------------------------------------------- */
+/* COLUMNAS */
+/* -------------------------------------------- */
 .hero-split__col {
-  flex: 1;
   display: flex;
+  position: relative;
 }
 
-/* IZQUIERDA */
+/* IZQUIERDA (30%) */
 .hero-split__col--text {
-  width: 30%;
-  padding: 120px 80px;
+  width: 40%;
+  padding: 140px 80px 120px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: white;
-}
-
-/* CONTENIDO */
-.hero-split__content {
-  max-width: 480px;
-  position: relative;
-  z-index: 3;
-}
-
-.hero-title {
-  overflow: hidden;
-  display: inline-block;
-}
-
-.hero-title-line {
-  display: inline-block;
-}
-
-.hero-split__title {
-  font-family: "Lato", sans-serif;
-  font-size: 3.5rem;
-  font-weight: 300;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-  color: #ffffff;
-}
-
-.hero-desc .word {
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.hero-split__desc {
-  color: #c9c9c9;
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-.hero-split__content {
-  position: relative;
   z-index: 5;
-  max-width: 650px;
-  color: white;
+  color: #fff;
 }
 
-.hero-desc .dword {
+/* Contenedor del texto */
+.hero-split__content {
+  max-width: 540px;
+  position: relative;
+  z-index: 10;
+}
+
+/* -------------------------------------------- */
+/* TITULAR */
+/* -------------------------------------------- */
+.hero-title {
+  width: 400px;
+  display: inline-block;
+  overflow: visible;
+}
+
+.hero-title img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* -------------------------------------------- */
+/* DESCRIPCIÓN */
+/* -------------------------------------------- */
+.hero-desc {
+  color: #c9c9c9;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.hero-desc .dchar {
   display: inline-block;
   white-space: nowrap;
 }
 
-/* DERECHA */
+/* -------------------------------------------- */
+/* IMAGEN DERECHA 70% */
+/* -------------------------------------------- */
 .hero-split__col--image {
-  width: 70%;
+  width: 60%;
   position: relative;
   overflow: hidden;
 }
@@ -233,34 +230,82 @@ p {
   position: absolute;
   inset: 0;
   width: 100%;
-  height: 140%;
-  top: -20%;
+  height: 160%;
+  top: -30%;
   background-size: cover;
   background-position: center;
+  z-index: 1;
   transform: scale(1.2);
   opacity: 0;
   filter: blur(20px);
-  z-index: 1;
+  will-change: transform, opacity, filter;
 }
 
+/* -------------------------------------------- */
+/* RESPONSIVE */
+/* -------------------------------------------- */
+@media (max-width: 1200px) {
+  .hero-split__col--text {
+    padding: 120px 60px;
+  }
+  .hero-split__title {
+    font-size: 3rem;
+  }
+}
 @media (max-width: 960px) {
   .hero-split {
     flex-direction: column;
     min-height: auto;
   }
   .hero-split__col--text {
-    padding: 4rem 2rem;
+    width: 100%;
+    padding: 4rem 2rem 2rem;
   }
   .hero-split__title {
     font-size: 2.4rem;
   }
-  .hero-split__desc {
-    font-size: 0.95rem;
-  }
   .hero-split__col--image {
+    width: 100%;
     height: 360px;
   }
+  .hero-image-bg {
+    height: 140%;
+    top: -20%;
+  }
 }
+@media (max-width: 600px) {
+  .hero-split__title {
+    font-size: 2.1rem;
+  }
+}
+/* ANIMACION LINEAS */
+.pattern-wrapper {
+  position: relative;
+  height: 0; /* no empuja contenido */
+}
+
+.pattern-container {
+  position: absolute;
+  right: -350px;
+  top: -180px;
+  width: 650px;
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1);
+  transition: none;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#pattern-lines {
+  position: absolute;
+  width: 650px;
+  height: auto;
+  pointer-events: none; /* no interferir */
+  opacity: 0.85; /* un toque elegante */
+  z-index: 9999;
+}
+
 /* SECCIÓN GALERIA – HOME */
 .section-gallery {
   background-color: #e5d8d3;
@@ -298,32 +343,62 @@ p {
 }
 
 /* Botones */
+/* Botones */
 .gallery__nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%) translateY(40px) scale(0);
-  opacity: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
-  font-size: 2rem;
-  width: 48px;
-  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  padding: 16px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  /* Aparición suave */
+  opacity: 0;
 }
 
+/* Izquierda */
 .gallery__nav--prev {
   left: 20px;
 }
 
+/* Derecha */
 .gallery__nav--next {
-  right: 20px;
+  right: 2%;
+}
+
+/* Sombra premium */
+.gallery__nav {
+  background: none; /* SIN fondo */
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  opacity: 0;
+  animation: fadeInNav 0.8s ease-out forwards;
+}
+
+/* Sombra solo para la flecha */
+.arrow-svg {
+  width: 60px;
+  height: 60px;
+  transition: transform 0.25s ease;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.35)); /* sombra premium */
+}
+
+/* Hover zoom */
+.gallery__nav:hover .arrow-svg {
+  transform: scale(1.12);
 }
 
 .site-header {

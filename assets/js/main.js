@@ -1,153 +1,190 @@
-// -------------------------------
-//   LENIS SMOOTH SCROLL (v1 API)
-// -------------------------------
+/* ------------------------------------------------------
+   0. LENIS (Smooth scroll)
+------------------------------------------------------- */
+gsap.registerPlugin(ScrollTrigger);
 
 const lenis = new Lenis({
-  duration: 1.4,                          // <– MÁS SUAVE Y LARGO
-  easing: (t) => 1 - Math.pow(1 - t, 3),   // <– easeOutCubic: premium, fluido
-  smooth: true,
-  smoothTouch: true,
-  wheelMultiplier: 0.9                     // <– más control al scroll
+  lerp: 0.08,
+  smooth: true
 });
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
 
-// Actualizar ScrollTrigger cuando Lenis hace scroll
+// conectar scrollTrigger con Lenis
 lenis.on('scroll', ScrollTrigger.update);
 
-// Indicarle a ScrollTrigger cómo obtener el scroll
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+
 ScrollTrigger.scrollerProxy(document.body, {
   scrollTop(value) {
-    if (arguments.length) {
-      lenis.scrollTo(value);   // mover scroll via Lenis
-    } else {
-      return lenis.scroll;     // obtener valor del scroll
-    }
-  },
-  getBoundingClientRect() {
-    return {
-      top: 0, left: 0,
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
+    return arguments.length ? lenis.scrollTo(value) : lenis.scroll;
   }
 });
 
-// Importante: no usar lenis.update()
-// Solo refrescamos ScrollTrigger
-ScrollTrigger.addEventListener("refresh", () => {
-  // NO lenis.update()
-});
-ScrollTrigger.refresh();
 
 
-// =============================
-// SPLIT TITLE (líneas → letras)
-// =============================
-function splitTitleLines(selector) {
-  const lines = document.querySelectorAll(selector);
-  lines.forEach(line => {
-    const text = line.innerText;
-    const chars = text.split("");
-    line.innerHTML = chars
-      .map(c => `<span class="char">${c === " " ? "&nbsp;" : c}</span>`)
-      .join("");
-  });
-}
 
-splitTitleLines(".hero-title-line");
-
-// =============================
-// SPLIT DESCRIPCIÓN (palabras)
-// =============================
-const descEl = document.querySelector(".hero-desc");
-if (descEl) {
-  const words = descEl.innerText.split(" ");
-  descEl.innerHTML = words
-    .map(w => `<span class="dword">${w}</span>`)
-    .join(" ");
-}
-
-// =============================
-// TIMELINE HERO (texto)
-// =============================
-const heroTl = gsap.timeline({ delay: 0.1 });
-
-// Título – letras, desde abajo con leve 3D
-heroTl.from(".hero-title-line .char", {
-  opacity: 0,
-  y: 50,
-  rotateX: -45,
-  transformOrigin: "0% 50% -30px",
-  stagger: 0.02,
-  duration: 1.1,
-  ease: "power3.out",
-});
-
-// Descripción – palabras con blur desde abajo
-heroTl.from(".hero-desc .dword", {
-  opacity: 0,
-  y: 20,
-  filter: "blur(8px)",
-  stagger: 0.07,
-  duration: 0.7,
-  ease: "power3.out",
-}, "-=0.4");
+/* ------------------------------------------------------
+   0. TITULO
+------------------------------------------------------- */
 
 
-// PARALLAX SUAVE EN TEXTO DEL HERO
-gsap.utils.toArray("[data-speed]").forEach(el => {
-  const speed = parseFloat(el.getAttribute("data-speed"));
-
-  gsap.to(el, {
-    y: () => window.innerHeight * speed,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".hero-split",
-      start: "top top",
-      end: "bottom top",
-      scrub: true
-    }
-  });
-});
-
-
-// -------------------------------
-//   PARALLAX HERO IMAGE
-// -------------------------------
-
-// =============================
-// ENTRADA DE LA IMAGEN (ON LOAD)
-// =============================
-gsap.fromTo(".hero-image-bg",
+gsap.fromTo(".hero-title img",
   {
+    scale: 1.5,
     opacity: 0,
-    scale: 1.2,
-    filter: "blur(20px) brightness(0.9)",
+    filter: "blur(20px)",
+    y: -100
   },
   {
-    opacity: 1,
     scale: 1,
-    filter: "blur(0px) brightness(1)",
-    duration: 1.6,
-    ease: "power3.out",
+    opacity: 1,
+    filter: "blur(0px)",
+    y: 0,
+    duration: 2.8,
+    ease: "power4.out"
   }
 );
 
-// =============================
-// PARALLAX CON EL SCROLL
-// =============================
+
+
+/* ------------------------------------------------------
+   3. SPLIT DESCRIPCIÓN
+------------------------------------------------------- */
+// SPLIT descripción en letras
+const descEl = document.querySelector(".hero-desc");
+
+if (descEl) {
+  const text = descEl.innerText;
+  const chars = text.split("");
+
+  descEl.innerHTML = chars
+    .map(c => `<span class="dchar">${c === " " ? "&nbsp;" : c}</span>`)
+    .join("");
+}
+
+// Animación letras descripción
+gsap.from(".hero-desc .dchar", {
+  opacity: 0,
+  y: 20,
+  filter: "blur(6px)",
+  stagger: 0.010,
+  duration: 0.6,
+  ease: "power3.out",
+  delay: 1
+});
+
+
+
+/* ------------------------------------------------------
+   5. ANIMACIÓN IMAGEN (Zoom + Blur)
+------------------------------------------------------- */
+gsap.fromTo(".hero-image-bg",
+  {
+    scale: 1.2,
+    opacity: 0,
+    filter: "blur(20px)"
+  },
+  {
+    scale: 1,
+    opacity: 1,
+    filter: "blur(0px)",
+    duration: 1.8,
+    ease: "power3.out"
+  }
+);
+
+
+/* ------------------------------------------------------
+   6. PARALLAX BIDIRECCIONAL
+------------------------------------------------------- */
+
+// Imagen
 gsap.to(".hero-image-bg", {
-  y: -350,                 // si quieres más exagerado, sube este valor
+  y: "-30vh",
   ease: "none",
   scrollTrigger: {
     trigger: ".hero-split",
     start: "top bottom",
     end: "bottom top",
-    scrub: 1.2,
+    scrub: true
+  }
+});
+
+// Título
+gsap.to(".hero-title", {
+  y: "-20vh",
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".hero-split",
+    start: "top bottom",
+    end: "bottom top",
+    scrub: true
+  }
+});
+
+// Título
+gsap.to(".hero-desc", {
+  y: "-10vh",
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".hero-split",
+    start: "top bottom",
+    end: "bottom top",
+    scrub: true
+  }
+});
+
+
+
+// Entrada inicial (igual)
+gsap.from("#pattern-lines rect", {
+  opacity: 0,
+  scaleY: 0,
+  transformOrigin: "center bottom",
+  duration: 2.8,
+  ease: "power3.out",
+  stagger: 0.1
+});
+
+// Loop suave usando yPercent para evitar saltos
+gsap.to("#pattern-lines rect", {
+  yPercent: "+=3",     // reemplaza pixels por porcentajes
+  repeat: -1,
+  yoyo: true,
+  duration: 3,
+  ease: "sine.inOut",
+  stagger: {
+    each: 0.05,
+    from: "random"
+  }
+});
+
+// Segundo loop (desfasado) también convertido a yPercent
+gsap.utils.toArray("#pattern-lines .line").forEach((line, i) => {
+  gsap.to(line, {
+    yPercent: "+=2.5",
+    duration: 2.6,
+    ease: "sine.inOut",
+    repeat: -1,
+    yoyo: true,
+    delay: (i % 5) * 0.18
+  });
+});
+
+
+
+// Parallax de desaparición del SVG completo
+gsap.to(".pattern-container", {
+  y: "-100vh",
+  opacity: 0,         // se desvanece
+  filter: "blur(15px)", // se difumina
+  ease: "sine.in",
+  scrollTrigger: {
+    trigger: ".hero-split",
+    start: "top top",       // justo cuando empieza el scroll
+    end: "top+=700 top",    // desaparece rápido al mover poco
+    scrub: true             // reversible y suave
   }
 });
 
@@ -158,89 +195,129 @@ gsap.to(".hero-image-bg", {
 /* --------- 3. GALERÍA SEGUNDA SECCIÓN --------- */
 
 // Imagen izquierda
-gsap.fromTo(".gallery__item--left img",
-  {
-    x: -120,
-    opacity: 0
-  },
-  {
-    x: 0,
-    opacity: 1,
-    duration: 1.4,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".section-gallery",
-      start: "top 80%",
-      end: "bottom 60%",
-      scrub: true,
-    }
+gsap.from(".gallery__item--left img", {
+  x: -120,
+  opacity: 0,
+  duration: 1.2,
+  ease: "power3.out",
+  scrollTrigger: {
+    trigger: ".section-gallery",
+    start: "top 80%",
+    once: true
   }
-);
+});
 
 // Imagen derecha
-gsap.fromTo(".gallery__item--right img",
-  {
-    x: 120,
-    opacity: 0
-  },
-  {
-    x: 0,
-    opacity: 1,
-    duration: 1.4,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".section-gallery",
-      start: "top 80%",
-      end: "bottom 60%",
-      scrub: true,
-    }
+gsap.from(".gallery__item--right img", {
+  x: 120,
+  opacity: 0,
+  duration: 1.2,
+  ease: "power3.out",
+  scrollTrigger: {
+    trigger: ".section-gallery",
+    start: "top 80%",
+    once: true
   }
-);
+});
 
 // Flecha izquierda
-gsap.fromTo(".gallery__nav--prev",
-  {
-    opacity: 0,
-    x: -80,
-    rotate: -30,
-    scale: 0.4,
-  },
-  {
-    opacity: 1,
-    x: 0,
-    rotate: 0,
-    scale: 1,
-    duration: 1.5,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".section-gallery",
-      start: "top 60%",
-      end: "top 20%",
-      scrub: 1,
-    }
+gsap.from(".gallery__nav--prev", {
+  opacity: 0,
+  x: -80,
+  rotate: -30,
+  scale: 0.4,
+  duration: 1.3,
+  ease: "power3.out",
+  scrollTrigger: {
+    trigger: ".section-gallery",
+    start: "top 60%",
+    once: true
   }
-);
+});
+
 
 // Flecha derecha
-gsap.fromTo(".gallery__nav--next",
-  {
-    opacity: 0,
-    x: 80,
-    rotate: 30,
-    scale: 0.4,
-  },
-  {
-    opacity: 1,
-    x: 0,
-    rotate: 0,
-    scale: 1,
-    duration: 1.5,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".section-gallery",
-      start: "top 60%",
-      end: "top 20%",
-      scrub: 1,
-    }
+gsap.from(".gallery__nav--next", {
+  opacity: 0,
+  x: 80,
+  rotate: 30,
+  scale: 0.4,
+  duration: 1.3,
+  ease: "power3.out",
+  scrollTrigger: {
+    trigger: ".section-gallery",
+    start: "top 60%",
+    once: true
   }
-);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // gallery code aquí
+
+
+const images = [
+  'wp-content/uploads/2025/12/depto1.jpg',
+  'wp-content/uploads/2025/12/depto2.jpg',
+  'wp-content/uploads/2025/12/depto1.jpg'
+];
+
+let index = 0;
+let isAnimating = false;
+
+const leftImg  = document.querySelector('.gallery__item--left img');
+const rightImg = document.querySelector('.gallery__item--right img');
+
+const btnPrev = document.querySelector('.gallery__nav--prev');
+const btnNext = document.querySelector('.gallery__nav--next');
+
+// estado inicial
+leftImg.src  = images[index];
+rightImg.src = images[(index + 1) % images.length];
+
+function updateImages(direction) {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  index =
+    direction === 'next'
+      ? (index + 1) % images.length
+      : (index - 1 + images.length) % images.length;
+
+  const nextIndex = (index + 1) % images.length;
+
+  gsap.to([leftImg, rightImg], {
+    opacity: 0,
+    x: direction === 'next' ? -60 : 60,
+    duration: 0.35,
+    ease: 'power2.in',
+    onComplete: () => {
+      leftImg.src  = images[index];
+      rightImg.src = images[nextIndex];
+
+      gsap.fromTo(
+        [leftImg, rightImg],
+        {
+          opacity: 0,
+          x: direction === 'next' ? 60 : -60
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.55,
+          ease: 'power3.out',
+          onComplete: () => {
+            isAnimating = false;
+          }
+        }
+      );
+    }
+  });
+}
+
+btnNext.addEventListener('click', () => updateImages('next'));
+btnPrev.addEventListener('click', () => updateImages('prev'));
+
+
+});
+
+
